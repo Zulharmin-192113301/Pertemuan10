@@ -3,7 +3,8 @@ var mysql = require ('mysql')
 var conn = mysql.createConnection ({
     host : 'localhost',
     user : 'root',
-    password : ''
+    password : '',
+    database : 'db_10_struk'
 })
 
 conn.connect((err) =>{
@@ -12,13 +13,11 @@ conn.connect((err) =>{
     else
     console.log('Terhubung ke Database');
 
-    console.log('Terhubung ke Database');
-
-    conn.query('CREATE DATABASE db_10_struk', (err, result) => {
+    conn.query('CREATE TABLE Strukbelanja (kodebarang INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, namaproduk VARCHAR(30) NOT NULL, qty VARCHAR(5) NOT NULL, hargaproduk VARCHAR(10), reg_time TIMESTAMP)', (err, result) => {
         if (err)
-        console.error('Gagal membuat database' + err)
+        console.error('Gagal membuat tabel' + err)
         else
-        console.log('Berhasil membuat database')
+        console.log('Berhasil membuat tabel')
     })
 
 
