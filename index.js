@@ -1,4 +1,12 @@
+var http = require ('http');
+var express = require ('express');
+var app = express()
+var bodyParser = require ('body-parser')
 var mysql = require ('mysql')
+
+
+app.use(bodyParser.urlencoded({extende:false}));
+app.use(bodyParser.json());
 
 var conn = mysql.createConnection ({
     host : 'localhost',
@@ -13,12 +21,23 @@ conn.connect((err) =>{
     else
     console.log('Terhubung ke Database');
 
-    conn.query('CREATE TABLE Strukbelanja (kodebarang INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, namaproduk VARCHAR(30) NOT NULL, qty VARCHAR(5) NOT NULL, hargaproduk VARCHAR(10), reg_time TIMESTAMP)', (err, result) => {
-        if (err)
-        console.error('Gagal membuat tabel' + err)
-        else
-        console.log('Berhasil membuat tabel')
-    })
+    app.post('/strukbelanja', (req,res) => {
+        var namaproduk = req.body.namaproduk
+        var qty = req.body.qty
+        var hargaproduk = req.body.hargaproduk
+        var query = "INSERT INTO Strukbelanja (namaproduk,qty,hargaproduk) VALUES ('" + namaproduk + "','" + qty + "','" + hargaproduk + "')"
 
+        conn.query(query, (err,result) =>{
+            if (err)
+            res.json (err)
+            else
+            res.json(result)
+        }) 
+    })
+        http.createServer(app)
+        .listen(8000, () =>{
+            console.log('server berjalan di port 8000')
+        }); 
+ 
 
 }) 
